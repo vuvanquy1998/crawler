@@ -7,6 +7,8 @@
 # useful for handling different item types with a single interface
 import logging
 import pymongo
+import requests
+
 
 class MongoPipeline(object):
 
@@ -39,3 +41,22 @@ class MongoPipeline(object):
         self.db[self.collection_name].insert(dict(item))
         logging.debug("Post added to MongoDB")
         return item
+
+
+class MattermostNotifier(object):
+
+    def __init__(self, channel_url):
+        self.channel_url = channel_url
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        # pull in information from settings.py
+        return cls(
+            channel_url=crawler.settings.get('CHANNEL_URL'),
+        )
+
+    def close_spider(self, spider):
+        headers = {'Content-Type': 'application/json', }
+        values = 'hihi'
+        res = requests.post(self.channel_url, headers=headers, data=values)
+        logging.info(res)

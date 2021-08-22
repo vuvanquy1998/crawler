@@ -3,10 +3,13 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
 
+from os import scandir
 import scrapy
 
 
-class CrawlerItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class StockInfo(scrapy.Item):
+    date = scrapy.Field()
+    value = scrapy.Field()
+    link = scrapy.Field()
+    title = scrapy.Field()
+    symbol = scrapy.Field()

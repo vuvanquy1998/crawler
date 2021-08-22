@@ -86,3 +86,15 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+1
+2
+3
+4
+ITEM_PIPELINES = {
+   'crawler.pipelines.MongoPipeline': 300,
+}
+
+MONGO_URI = 'mongodb://localhost:27017'
+MONGO_DATABASE = 'crawl'
+COLLECTION_NAME = 'stock_admin_department_announced'

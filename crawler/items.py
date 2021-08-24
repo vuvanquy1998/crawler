@@ -13,3 +13,6 @@ class StockInfo(scrapy.Item):
     link = scrapy.Field()
     title = scrapy.Field()
     symbol = scrapy.Field()
+
+class NewEvents(scrapy.Item):
+    events = scrapy.Field()

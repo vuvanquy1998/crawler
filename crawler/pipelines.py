@@ -6,9 +6,9 @@
 
 # useful for handling different item types with a single interface
 import logging
+from bson.raw_bson import RawBSONDocument
 import pymongo
 import requests
-
 
 class MongoPipeline(object):
 
@@ -36,11 +36,11 @@ class MongoPipeline(object):
         # clean up when spider is closed
         self.client.close()
 
-    def process_item(self, item, spider):
+    def process_item(self, items, spider):
         # how to handle each post
-        self.db[self.collection_name].insert(dict(item))
+        self.db[self.collection_name].insert(dict(items))
         logging.debug("Post added to MongoDB")
-        return item
+        return items
 
 
 class MattermostNotifier(object):
@@ -55,8 +55,24 @@ class MattermostNotifier(object):
             channel_url=crawler.settings.get('CHANNEL_URL'),
         )
 
-    def close_spider(self, spider):
-        headers = {'Content-Type': 'application/json', }
-        values = 'hihi'
-        res = requests.post(self.channel_url, headers=headers, data=values)
-        logging.info(res)
+    def process_item(self, items, spider):
+        headers = {'Content-Type': 'text/text; charset=utf-8' }
+        message = str(items['events'])
+        values = '{"text": ' + f'{message}' + '}'
+        values = values.encode('utf-8')
+        values = '{"text": "vvq"}'
+        logging.info(f'Handle send message to mattermost{items}')
+        for i in range(5):
+            logging.info(f'i: {i}')
+            res = requests.post(self.channel_url, headers=headers, data=values)
+            if res.status_code == 200:
+                logging.info("Success send message to mattermost")
+                # break
+            else:
+                logging.info("Retry send message to mattermost")
+                
+        return items
+
+    def close_spider(self,  spider):
+        pass
+    

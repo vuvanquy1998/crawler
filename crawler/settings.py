@@ -87,12 +87,13 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 ITEM_PIPELINES = {
-    'crawler.pipelines.MongoPipeline': 300,
+    # 'crawler.pipelines.MongoPipeline': 300,
     'crawler.pipelines.MattermostNotifier': 300,
 }
 
 MONGO_URI = 'mongodb://localhost:27017'
-MONGO_DATABASE = 'crawl'
 COLLECTION_NAME = 'stock_admin_department_announced'
+
+MONGO_DATABASE = 'crawl'
 
 CHANNEL_URL = 'https://teams.entrade.com.vn/hooks/t1amu4ym6pyeuxmpfi6si6ms5w'

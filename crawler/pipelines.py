@@ -56,21 +56,19 @@ class MattermostNotifier(object):
         )
 
     def process_item(self, items, spider):
-        headers = {'Content-Type': 'text/text; charset=utf-8' }
-        message = str(items['events'])
-        values = '{"text": ' + f'{message}' + '}'
-        values = values.encode('utf-8')
-        values = '{"text": "vvq"}'
-        logging.info(f'Handle send message to mattermost{items}')
+        headers = {'Content-Type': 'text/plain' }
+        message = items['events']
+        data = '{"text": ' + f'"{message}"' + ' }'
+        data = data.encode()
+        logging.info(f'Handle send message to mattermost. {data}')
         for i in range(5):
-            logging.info(f'i: {i}')
-            res = requests.post(self.channel_url, headers=headers, data=values)
+            logging.info(f'Retry time {i}')
+            res = requests.post(self.channel_url, headers=headers, data=data)
             if res.status_code == 200:
                 logging.info("Success send message to mattermost")
-                # break
+                break
             else:
-                logging.info("Retry send message to mattermost")
-                
+                logging.info(f'Retry send message to mattermost{res}')
         return items
 
     def close_spider(self,  spider):
